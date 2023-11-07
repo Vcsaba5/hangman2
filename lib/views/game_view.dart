@@ -2,37 +2,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hangman/controllers/game_view_controller.dart';
-
-class GameView extends StatelessWidget {
-  GameViewController controller = Get.put(GameViewController());
+import 'package:hangman/views/widgets/letter_button.dart';
+import 'package:hangman/views/widgets/letter_holder.dart';
+    class GameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  GameViewController controller = Get.put(GameViewController(context));
+    controller.init();
     return GetBuilder<GameViewController>(
       init: controller,
       builder: (_) {
-        return Scaffold(
+        return (!controller.theInitIsDone)?Center(child: CircularProgressIndicator()):Scaffold(
           appBar: AppBar(
             title: Text("Hangman"),
           ),
           body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset("images/${controller.hibakSzama()}.png"),
-              Text(controller.randomSzoveg),
-              Text(controller.csillagosSzoveg),
+              Text(controller.csillagosSzoveg,
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
               Column(
-                
                 children: [
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      LetterButon(letter: "A", controller: controller),
-                      LetterButon(letter: "Á",controller: controller),
-                      LetterButon(letter: "B",controller: controller),
-                      LetterButon(letter: "C",controller: controller),
-                      LetterButon(letter: "D",controller: controller),
-                      LetterButon(letter: "E",controller: controller),
-                  ],
-                )
+                  LetterHolder(controller: controller,letters: ["A","Á","B","C","D","E"]),
+                  LetterHolder(controller: controller,letters: ["É","F","G","H","I","Í"]),
+                  LetterHolder(controller: controller,letters: ["J","L","K","M","N","O"]),
+                  LetterHolder(controller: controller,letters: ["Ó","Ö","Ő","P","Q","R"]),
+                  LetterHolder(controller: controller,letters: ["S","Z","U","Ú","Ü","Ű"]),
+                  LetterHolder(controller: controller,letters: ["V","W","X","Y","Z"," "]),
                 ],
               )
             ],
@@ -43,22 +44,3 @@ class GameView extends StatelessWidget {
   }
 }
 
-class LetterButon extends StatelessWidget {
-  const LetterButon({
-    required this.letter,
-    required this.controller,
-  });
-
-  final GameViewController controller;
-  final String letter;
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoButton.filled(padding: EdgeInsets.zero, 
-    child: Text(letter), 
-    onPressed: (controller.aMegadottBetuVoltEmar(letter))
-    ? null 
-    : () => controller.tippHozzaadasa(letter), 
-                    );
-  }
-}

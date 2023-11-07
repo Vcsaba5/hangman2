@@ -1,10 +1,16 @@
 // játék logika
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:hangman/models/tipp.dart';
 import 'package:hangman/views/end_view.dart';
 
 class GameViewController extends GetxController {
+  GameViewController(this.context);
+
+  
+  BuildContext context;
+
   List<String> szovegek = [
     "alma piros",
     "az ég kék",
@@ -15,13 +21,14 @@ class GameViewController extends GetxController {
 
   String csillagosSzoveg = ""; //****
 
-  void randomSzovegGeneralasa() {
+  void init() {
     int index = Random().nextInt(szovegek.length); //]0,szoveghossz];
     randomSzoveg = szovegek[index];
     csillagosSzoveg = "";
     for (int i = 0; i < randomSzoveg.length; i++) {
       csillagosSzoveg += "*";
     }
+    tippek = [];
     update();
   }
 
@@ -100,10 +107,26 @@ class GameViewController extends GetxController {
     }
   }
 
+void kepekLetarolasaCacheMemoriaba()async{
+  await precacheImage(AssetImage('images/0.png'), context);
+  await precacheImage(AssetImage('images/1.png'), context);
+  await precacheImage(AssetImage('images/2.png'), context);
+  await precacheImage(AssetImage('images/3.png'), context);
+  await precacheImage(AssetImage('images/4.png'), context);
+  await precacheImage(AssetImage('images/5.png'), context);
+  await precacheImage(AssetImage('images/6.png'), context);
+  await precacheImage(AssetImage('images/win.png'), context);
+
+}
+
+bool theInitIsDone = false;
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    randomSzovegGeneralasa();
+    init();
+    theInitIsDone = true;
+
   }
 }
